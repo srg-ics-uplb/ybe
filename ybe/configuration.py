@@ -17,7 +17,8 @@ using :py:func:`config_context`. Example:
 import os
 from copy import deepcopy
 
-from ruamel import yaml
+#from ruamel import yaml
+from ruamel.yaml import YAML
 from contextlib import contextmanager
 from pkg_resources import resource_stream
 
@@ -173,9 +174,11 @@ def load_from_yaml(yaml_str):
     Args:
         yaml_str (str): The string containing the YAML config to parse.
     """
-    config_dict = yaml.safe_load(yaml_str) or {}
-    load_from_dict(config_dict)
+    #config_dict = yaml.safe_load(yaml_str) or {}
+    #load_from_dict(config_dict)
 
+    yaml = YAML(typ='safe', pure=True)
+    yaml.load(yaml_str)
 
 def load_from_dict(config_dict):
     """Load configuration options from a given dictionary.

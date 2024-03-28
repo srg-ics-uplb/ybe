@@ -1,4 +1,4 @@
-ruamel.yaml
+ruamel.yaml==0.18.3
 lxml
 pypandoc
 jinja2
