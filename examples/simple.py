@@ -8,8 +8,18 @@ __licence__ = 'GPL v3'
 from ybe import read_ybe_file, YbeToLatex, YbeToMarkdown, YbeToDocx, YbeToODT, YbeToHTML
 
 from importlib import resources
+import random
+
 
 ybe_exam = read_ybe_file('./simple.ybe')
+
+#randomize questions
+random.shuffle(ybe_exam.questions)
+
+#randomize answers to questions
+for question in ybe_exam.questions:
+    random.shuffle(question.answers)
+
 
 YbeToLatex().convert(ybe_exam, '/tmp/ybe/latex/main.tex', copy_resources=True)
 YbeToMarkdown().convert(ybe_exam, '/tmp/ybe/markdown/main.md', copy_resources=True)
