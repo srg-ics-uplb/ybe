@@ -1,0 +1,18 @@
+ybe_version: 0.3.5
+
+questions:
+- multiple_choice:
+   id: 2024_2nd
+#   title: sample question
+   points: 1
+   text: Which of the following devices is responsible for selecting the best path for a datagram?
+   answers:
+      - answer:
+         text: NIC
+      - answer:
+         text: Hub
+      - answer:
+         text: Switch
+      - answer: 
+         text: Router
+         correct: true
