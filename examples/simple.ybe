@@ -16,3 +16,19 @@ questions:
       - answer: 
          text: Router
          correct: true
+
+- multiple_choice:
+   id: 2024_2nd_1
+#   title: sample question
+   points: 1
+   text: Which of the following protocols use distance-vector routing?
+   answers:
+      - answer:
+         text: OSPF
+      - answer:
+         text: RIP
+         correct: true
+      - answer:
+         text: BGP
+      - answer: 
+         text: DHCP
