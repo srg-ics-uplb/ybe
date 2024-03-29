@@ -47,7 +47,6 @@ questions:
 
 - multiple_choice:
    id: q2
-#   title: sample question
    points: 1
    text: Which of the following protocols use distance-vector routing?
    answers:
