@@ -6,9 +6,9 @@
 {{ question.text.to_markdown() }}
 -->
 
-{{ question_index }} {{ question.text.to_markdown() }}
-
 {% set choices = ['a','b','c','d','e','f','g','h'] %}
+
+{{ question_index }} {{ question.text.to_markdown() }}
 
 {% for answer in question.answers %}
 {% if answer.correct is true %}
