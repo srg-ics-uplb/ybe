@@ -25,6 +25,7 @@ make install
 #### Create the ybe file
 
 ```yaml
+# simple.ybe
 ybe_version: 0.3.6
 
 questions:
