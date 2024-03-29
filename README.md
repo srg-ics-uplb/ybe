@@ -7,8 +7,12 @@ See the [original README](./README.rst)
 
 ## Installation
 
+This assummes that you have a python3 environment with tools like pip3 installed.
+
 Clone the repository on your local machine.
 
 ```bash
 $git clone https://github.com/srg-ics-uplb/ybe.git
 ```
+
+
