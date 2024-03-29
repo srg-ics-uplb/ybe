@@ -15,7 +15,7 @@ you don't have a local enviroment setup.
 ```bash
 git clone https://github.com/srg-ics-uplb/ybe.git
 cd ybe
-sudo apt install -y build-essential pandoc
+sudo apt update && sudo apt install -y build-essential pandoc
 pip3 install -r requirements.txt wheel
 make clean
 make uninstall
