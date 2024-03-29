@@ -9,10 +9,10 @@
 {{ question_index }} {{ question.text.to_markdown() }}
 
 {% for answer in question.answers %}
-{% if answer.correct is true %}
-{{loop.index}}. *{{ answer.text.to_markdown() }}*
-{% else %}
-{{loop.index}}. {{ answer.text.to_markdown() }}
-{% endif %}
+   {% if answer.correct is true %}
+      {{loop.index}}. *{{ answer.text.to_markdown() }}*
+   {% else %}
+      {{loop.index}}. {{ answer.text.to_markdown() }}
+   {% endif %}
 {% endfor %}
 
