@@ -65,6 +65,7 @@ questions:
 #### Write the code
 
 ```python
+#simple.py
 
 from ybe import read_ybe_file, YbeToLatex, YbeToMarkdown, YbeToDocx, YbeToODT, YbeToHTML
 import random
@@ -88,4 +89,8 @@ YbeToODT().convert(ybe_exam, './simple.odt')
 
 ```
 
+#### Run the code
 
+```bash
+python3 ./simple.py
+```
