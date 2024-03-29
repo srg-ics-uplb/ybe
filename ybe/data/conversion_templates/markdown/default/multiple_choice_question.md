@@ -8,11 +8,14 @@
 
 {{ question_index }} {{ question.text.to_markdown() }}
 
+{% set choices = ['a','b','c','d','e','f','g','h'] %}
+
 {% for answer in question.answers %}
-   {% if answer.correct is true %}
-      {{loop.index}}. *{{ answer.text.to_markdown() }}*
-   {% else %}
-      {{loop.index}}. {{ answer.text.to_markdown() }}
-   {% endif %}
+{% if answer.correct is true %}
+{{ choices[loop.index0] }}) *{{ answer.text.to_markdown() }}*
+{% else %}
+{{ choices[loop.index0] }}) {{ answer.text.to_markdown() }}
+{% endif %}
 {% endfor %}
+
 
