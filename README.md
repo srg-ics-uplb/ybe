@@ -31,8 +31,7 @@ ybe_version: 0.3.6
 
 questions:
 - multiple_choice:
-   id: 2024_2nd
-#   title: sample question
+   id: q1
    points: 1
    text: Which of the following devices is responsible for selecting the best path for a datagram?
    answers:
@@ -47,7 +46,7 @@ questions:
          correct: true
 
 - multiple_choice:
-   id: 2024_2nd_1
+   id: q2
 #   title: sample question
    points: 1
    text: Which of the following protocols use distance-vector routing?
