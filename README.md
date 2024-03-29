@@ -2,7 +2,7 @@
 
 This is a fork of [YAML Based Exams](https://github.com/robbert-harms/ybe) which 
 allows users to create multiple choice exams/quizzes in yaml. The original package 
-is no longer actively maintained so this fork was made.
+is no longer actively maintained so this fork was made. Tested on Ubuntu 22.04.
 
 See the [original README](./README.rst).
 
