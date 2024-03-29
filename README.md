@@ -9,7 +9,7 @@ See the [original README](./README.rst) for more advanced usage.
 ## Installation
 
 This assummes that you have a python3 environment with tools like pip3 installed.
-Dev box is Ubuntu 22.04.
+Dev box used is Ubuntu 22.04.
 
 ```bash
 git clone https://github.com/srg-ics-uplb/ybe.git
