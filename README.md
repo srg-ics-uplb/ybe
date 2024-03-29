@@ -1,6 +1,6 @@
 ## Overview
 
-This is a fork of [YBE}(https://github.com/robbert-harms/ybe). 
+This is a fork of [YAML Based Exams](https://github.com/robbert-harms/ybe). 
 It allows users to create multiple choice exams/quizzes in yaml.
 
 See the original [README](./README.rst)
