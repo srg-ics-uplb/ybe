@@ -14,6 +14,7 @@ Dev box is Ubuntu 22.04.
 ```bash
 git clone https://github.com/srg-ics-uplb/ybe.git
 cd ybe
+sudo apt install -y pandoc
 pip3 install -r requirements.txt
 make clean
 make uninstall
