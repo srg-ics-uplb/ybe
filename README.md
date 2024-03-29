@@ -20,4 +20,43 @@ make uninstall
 make install
 ```
 
+## Usage
 
+Create the ybe file.
+
+```yaml
+ybe_version: 0.3.6
+
+questions:
+- multiple_choice:
+   id: 2024_2nd
+#   title: sample question
+   points: 1
+   text: Which of the following devices is responsible for selecting the best path for a datagram?
+   answers:
+      - answer:
+         text: NIC
+      - answer:
+         text: Hub
+      - answer:
+         text: Switch
+      - answer: 
+         text: Router
+         correct: true
+
+- multiple_choice:
+   id: 2024_2nd_1
+#   title: sample question
+   points: 1
+   text: Which of the following protocols use distance-vector routing?
+   answers:
+      - answer:
+         text: OSPF
+      - answer:
+         text: RIP
+         correct: true
+      - answer:
+         text: BGP
+      - answer: 
+         text: DHCP
+```
