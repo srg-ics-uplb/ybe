@@ -78,7 +78,7 @@ for question in ybe_exam.questions:
     random.shuffle(question.answers)
 
 #you can do more advanced stuff like filtering etc.
-#by adding code. 
+#by adding the necessary code. 
 
 #Generate the documents which you can open in 
 #MS Word or LibreOffice
