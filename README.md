@@ -22,7 +22,7 @@ make install
 
 ## Usage
 
-Create the ybe file.
+#### Create the ybe file
 
 ```yaml
 ybe_version: 0.3.6
@@ -59,4 +59,27 @@ questions:
          text: BGP
       - answer: 
          text: DHCP
+```
+
+#### Write the code
+
+```python
+
+from ybe import read_ybe_file, YbeToLatex, YbeToMarkdown, YbeToDocx, YbeToODT, YbeToHTML
+
+import random
+
+
+ybe_exam = read_ybe_file('./simple.ybe')
+
+#randomize questions
+random.shuffle(ybe_exam.questions)
+
+#randomize answers to questions
+for question in ybe_exam.questions:
+    random.shuffle(question.answers)
+
+YbeToDocx().convert(ybe_exam, './simple.docx')
+YbeToODT().convert(ybe_exam, './simple.odt')
+
 ```
