@@ -15,7 +15,7 @@ Dev box used is Ubuntu 22.04.
 git clone https://github.com/srg-ics-uplb/ybe.git
 cd ybe
 sudo apt install -y build-essential pandoc
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt wheel
 make clean
 make uninstall
 make install
