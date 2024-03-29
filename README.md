@@ -27,7 +27,6 @@ make install
 #### Create the ybe file
 
 ```yaml
-# simple.ybe
 ybe_version: 0.3.6
 
 questions:
@@ -60,6 +59,23 @@ questions:
          text: BGP
       - answer: 
          text: DHCP
+ 
+- multiple_response:
+   id: q3
+   points: 1
+   text: A socket is composed of?
+   answers:
+      - answer:
+         text: URL
+      - answer:
+         text: IP Address
+         correct: true
+      - answer:
+         text: MAC Address
+      - answer: 
+         text: Port Number
+         correct: true
+
 ```
 
 #### Write the code
