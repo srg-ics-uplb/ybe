@@ -11,10 +11,13 @@ See the [original README](./README.rst).
 This assummes that you have a python3 environment with tools like pip3 installed.
 Dev box is Ubuntu 22.04.
 
-Clone the repository on your local machine.
-
 ```bash
-$git clone https://github.com/srg-ics-uplb/ybe.git
+git clone https://github.com/srg-ics-uplb/ybe.git
+cd ybe
+pip3 install -r requirements.txt
+make clean
+make uninstall
+make install
 ```
 
 
