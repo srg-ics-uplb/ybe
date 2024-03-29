@@ -79,6 +79,11 @@ random.shuffle(ybe_exam.questions)
 for question in ybe_exam.questions:
     random.shuffle(question.answers)
 
+#you can do more advanced stuff like filtering etc.
+#by adding code. 
+
+#Generate the documents which you can open in 
+#MS Word or LibreOffice
 YbeToDocx().convert(ybe_exam, './simple.docx')
 YbeToODT().convert(ybe_exam, './simple.odt')
 
