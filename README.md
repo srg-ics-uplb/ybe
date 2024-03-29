@@ -29,6 +29,8 @@ make install
 ```yaml
 ybe_version: 0.3.6
 
+#simple.ybe
+
 questions:
 - multiple_choice:
    id: q1
