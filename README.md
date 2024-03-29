@@ -9,7 +9,8 @@ See the [original README](./README.rst) for more advanced usage.
 ## Installation
 
 This assummes that you have a python3 environment with tools like pip3 installed.
-Dev box used is Ubuntu 22.04. The repo also works in GitHub's Codespaces.
+Dev box used is Ubuntu 22.04. The repo also works in GitHub's Codespaces in case 
+you don't have a local enviroment setup.
 
 ```bash
 git clone https://github.com/srg-ics-uplb/ybe.git
