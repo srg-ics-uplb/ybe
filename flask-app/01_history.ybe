@@ -1,0 +1,42 @@
+ybe_version: 0.3.6
+#history and definition
+
+questions:
+
+- multiple_response:
+    id: q1
+    points: 1
+    text: !markdown |- 
+          Which is not a valid view of an operating system?
+    answers:
+        - answer:
+           text: collection of parallel processes
+           correct: true
+        - answer:
+           text: collection of resource managers
+        - answer:
+           text: a program that interfaces between the user and the hardware
+        - answer:
+           text: collection of programs
+        - answer:
+           text: None of the above
+
+- multiple_response:
+    id: q2
+    points: 1
+    text: !markdown |- 
+          In what decade was the operating system born?
+    answers:
+        - answer:
+           text: 1930s
+        - answer:
+           text: 1950s
+           correct: true
+        - answer:
+           text: 1970s
+        - answer:
+           text: 1980s
+        - answer:
+           text: None of the above
+
+

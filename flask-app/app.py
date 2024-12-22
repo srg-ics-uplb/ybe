@@ -5,16 +5,19 @@ app = Flask(__name__)
 # Sample questions for the quiz
 questions = [
     {
+        'id': 0,
         'question': 'What is the capital of France?',
         'options': ['Berlin', 'Madrid', 'Paris', 'Lisbon'],
         'answer': 'Paris'
     },
     {
+        'id': 1,
         'question': 'Which planet is known as the Red Planet?',
         'options': ['Earth', 'Mars', 'Jupiter', 'Saturn'],
         'answer': 'Mars'
     },
     {
+        'id': 2,
         'question': 'What is the largest ocean on Earth?',
         'options': ['Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean', 'Pacific Ocean'],
         'answer': 'Pacific Ocean'
