@@ -3,14 +3,60 @@
 <head>
     <title>Quiz</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
         .nav {
             text-align: right;
             padding: 10px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
         }
         .nav a {
             color: #666;
             text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .nav a:hover {
+            background: #eee;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .question {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .options {
+            margin-left: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        button[type="submit"] {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button[type="submit"]:hover {
+            background: #45a049;
         }
     </style>
 </head>
@@ -21,14 +67,19 @@
     <h1>Multiple Choice Quiz</h1>
     <form action="{{ url_for('submit') }}" method="post">
         {% for question in questions %}
-            <div>
-                <h4>{{ question['text'] }}</h4>
-                {% for option in question['options'] %}
-                    <input type="checkbox" name="question-{{ question['id'] }}" value="{{ option }}"> {{ option }}<br>
-                {% endfor %}
+            <div class="question">
+                <h3>{{ question['text'] }}</h3>
+                <div class="options">
+                    {% for option in question['options'] %}
+                        <label>
+                            <input type="checkbox" name="question-{{ question['id'] }}" value="{{ option }}">
+                            {{ option }}
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
-        <button type="submit">Submit</button>
+        <button type="submit">Submit Quiz</button>
     </form>
 </body>
 </html>

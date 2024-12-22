@@ -5,7 +5,7 @@ from ybe import read_ybe_file
 from ybe.lib.ybe_nodes import YbeExam
 import uuid
 import sqlite3
-from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS
+from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS, YBE_FILE
 from datetime import datetime
 
 # Configure logger
@@ -25,7 +25,7 @@ def get_db():
 
 def load_and_shuffle_questions():
     # Load YBE file
-    ybe_data = read_ybe_file("example.ybe")
+    ybe_data = read_ybe_file(YBE_FILE)
 
     questions = []
     
