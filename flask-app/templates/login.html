@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Login</title>
+</head>
+<body>
+    <h1>Quiz Login</h1>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="{{ url_for('login') }}">
+        <div>
+            <label>Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label>Exam Code:</label>
+            <input type="text" name="exam_code" required>
+        </div>
+        <button type="submit">Start Quiz</button>
+    </form>
+</body>
+</html>

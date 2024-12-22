@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 import random
 import logging
 from ybe import read_ybe_file
 from ybe.lib.ybe_nodes import YbeExam
 import uuid
+import sqlite3
+from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS
+from datetime import datetime
 
 # Configure logger
 logging.basicConfig(
@@ -14,6 +17,11 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Change this to a secure key
+
+def get_db():
+    db = sqlite3.connect('quiz.db')
+    db.row_factory = sqlite3.Row
+    return db
 
 def load_and_shuffle_questions():
     # Load YBE file
@@ -32,7 +40,7 @@ def load_and_shuffle_questions():
         # Move special answers to end
         for i, ans in enumerate(answers):
             if isinstance(ans.text.text, str):
-                if "All of the above" in ans.text.text or "None of the above" in ans.text.text:
+                if "all of the above" in ans.text.text or "none of the above" in ans.text.text:
                     answers.append(answers.pop(i))
         
         # Format for template and log
@@ -47,10 +55,42 @@ def load_and_shuffle_questions():
     
     return questions
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        exam_code = request.form['exam_code']
+        
+        db = get_db()
+        user = db.execute('SELECT * FROM user_sessions WHERE email = ?', (email,)).fetchone()
+        
+        if user and exam_code == EXAM_CODE and user['completed_at'] is None:
+            session['user_id'] = str(uuid.uuid4())
+            db.execute('''
+                UPDATE user_sessions 
+                SET session_id = ?, login_count = login_count + 1, 
+                    last_login_attempt = CURRENT_TIMESTAMP
+                WHERE email = ?
+            ''', (session['user_id'], email))
+            db.commit()
+            return redirect(url_for('index'))
+            
+        db.execute('''
+            UPDATE user_sessions 
+            SET last_login_attempt = CURRENT_TIMESTAMP,
+                login_count = login_count + 1
+            WHERE email = ?
+        ''', (email,))
+        db.commit()
+        return render_template('login.html', error='Invalid credentials or test already taken')
+    
+    return render_template('login.html')
+
 @app.route('/')
 def index():
     if 'user_id' not in session:
-        session['user_id'] = str(uuid.uuid4())
+        return redirect(url_for('login'))
+        
     if 'questions' not in session:
         questions = load_and_shuffle_questions()
         session['total_questions'] = len(questions)
