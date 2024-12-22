@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import random
 import logging
 from ybe import read_ybe_file
 from ybe.lib.ybe_nodes import YbeExam
+import uuid
 
 # Configure logger
 logging.basicConfig(
@@ -12,6 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key-here'  # Change this to a secure key
 
 def load_and_shuffle_questions():
     # Load YBE file
@@ -45,22 +47,30 @@ def load_and_shuffle_questions():
     
     return questions
 
-
-
 @app.route('/')
 def index():
-    questions = load_and_shuffle_questions()
-    return render_template('index.html', questions=questions)
+    if 'user_id' not in session:
+        session['user_id'] = str(uuid.uuid4())
+    if 'questions' not in session:
+        questions = load_and_shuffle_questions()
+        session['total_questions'] = len(questions)
+        session['questions'] = questions
+        logger.debug(f"User {session['user_id']}: Loaded {session['total_questions']} questions")
+    return render_template('index.html', questions=session['questions'])
 
 @app.route('/submit', methods=['POST'])
 def submit():
     score = 0
-    logger.debug(request.form)
-    for question in questions:
-        selected_options = request.form.getlist(f'question-{question["id"]}')
-        if set(selected_options) == set(question['correct']):
-            score += 1
-    return render_template('result.html', score=score, total=len(questions))
+    if 'questions' in session:
+        for question in session['questions']:
+            selected = request.form.getlist(f'question-{question["id"]}')
+            if set(selected) == set(question['correct']):
+                score += 1
+        total = session.get('total_questions', 0)
+        logger.debug(f"User {session['user_id']}: Score {score}/{total}")
+        session.pop('questions', None)
+        return render_template('result.html', score=score, total=total)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
