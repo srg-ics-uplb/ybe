@@ -1,0 +1,52 @@
+ybe_version: 0.3.6
+
+questions:
+- multiple_response:
+   id: q1
+   points: 1
+   text: Which of these are Romance languages?
+   answers:
+      - answer:
+         text: French
+         correct: true
+      - answer:
+         text: Spanish
+         correct: true
+      - answer:
+         text: German
+      - answer:
+         text: Italian
+         correct: true
+
+- multiple_response:
+   id: q2
+   points: 1
+   text: Select all planets with rings
+   answers:
+      - answer:
+         text: Mars
+      - answer:
+         text: Saturn
+         correct: true
+      - answer:
+         text: Jupiter
+         correct: true
+      - answer:
+         text: Uranus
+         correct: true
+
+- multiple_response:
+   id: q3
+   points: 1
+   text: Which are primary colors?
+   answers:
+      - answer:
+         text: Red
+         correct: true
+      - answer:
+         text: Green
+      - answer:
+         text: Blue
+         correct: true
+      - answer:
+         text: Purple
