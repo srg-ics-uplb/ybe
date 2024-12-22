@@ -64,25 +64,27 @@ def login():
         db = get_db()
         user = db.execute('SELECT * FROM user_sessions WHERE email = ?', (email,)).fetchone()
         
-        if user and exam_code == EXAM_CODE and user['completed_at'] is None:
+        if user and exam_code == EXAM_CODE:
+            if user['score'] > -1:  # Quiz already taken
+                logger.info(f"User {email} already took quiz. Score: {user['score']}")
+                return render_template('result.html', 
+                                    score=user['score'], 
+                                    total=len(load_and_shuffle_questions()),
+                                    completed=True)
+            
             session['user_id'] = str(uuid.uuid4())
+            session['email'] = email
             db.execute('''
                 UPDATE user_sessions 
-                SET session_id = ?, login_count = login_count + 1, 
-                    last_login_attempt = CURRENT_TIMESTAMP
+                SET session_id = ?, 
+                    last_login_attempt = CURRENT_TIMESTAMP,
+                    login_count = login_count + 1
                 WHERE email = ?
             ''', (session['user_id'], email))
             db.commit()
             return redirect(url_for('index'))
             
-        db.execute('''
-            UPDATE user_sessions 
-            SET last_login_attempt = CURRENT_TIMESTAMP,
-                login_count = login_count + 1
-            WHERE email = ?
-        ''', (email,))
-        db.commit()
-        return render_template('login.html', error='Invalid credentials or test already taken')
+        return render_template('login.html', error='Invalid credentials')
     
     return render_template('login.html')
 
@@ -101,16 +103,42 @@ def index():
 @app.route('/submit', methods=['POST'])
 def submit():
     score = 0
-    if 'questions' in session:
-        for question in session['questions']:
-            selected = request.form.getlist(f'question-{question["id"]}')
-            if set(selected) == set(question['correct']):
-                score += 1
-        total = session.get('total_questions', 0)
-        logger.debug(f"User {session['user_id']}: Score {score}/{total}")
-        session.pop('questions', None)
-        return render_template('result.html', score=score, total=total)
+    if 'questions' in session and 'user_id' in session:
+        db = get_db()
+        try:
+            for question in session['questions']:
+                selected = request.form.getlist(f'question-{question["id"]}')
+                if set(selected) == set(question['correct']):
+                    score += 1
+            
+            total = session.get('total_questions', 0)
+            logger.debug(f"User {session['user_id']}: Score {score}/{total}")
+            
+            # Update database
+            db.execute('''
+                UPDATE user_sessions 
+                SET score = ?, 
+                    submitted_at = CURRENT_TIMESTAMP,
+                    completed_at = CURRENT_TIMESTAMP
+                WHERE session_id = ?
+            ''', (score, session['user_id']))
+            db.commit()
+            
+            # Clear session
+            session.clear()
+            
+            return render_template('result.html', score=score, total=total)
+            
+        except sqlite3.Error as e:
+            logger.error(f"Database error: {e}")
+            db.rollback()
+            
     return redirect(url_for('index'))
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

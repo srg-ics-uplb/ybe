@@ -2,8 +2,22 @@
 <html>
 <head>
     <title>Quiz</title>
+    <style>
+        .nav {
+            text-align: right;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .nav a {
+            color: #666;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+    <div class="nav">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
     <h1>Multiple Choice Quiz</h1>
     <form action="{{ url_for('submit') }}" method="post">
         {% for question in questions %}

@@ -24,12 +24,12 @@ def init_db():
     else:
         logger.info(f"Database already exists: {db_path}")
     
-    # Read and insert takers
+    # Read and insert takers with initial score of -1
     try:
         with open('takers.txt', 'r') as f:
             emails = [line.strip() for line in f if line.strip()]
             for email in emails:
-                conn.execute('INSERT INTO user_sessions (email) VALUES (?)', (email,))
+                conn.execute('INSERT INTO user_sessions (email, score) VALUES (?, -1)', (email,))
                 logger.info(f"Added taker: {email}")
     except FileNotFoundError:
         logger.error("takers.txt not found")
