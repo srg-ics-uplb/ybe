@@ -58,6 +58,11 @@
         button[type="submit"]:hover {
             background: #45a049;
         }
+        .question-number {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -68,7 +73,7 @@
     <form action="{{ url_for('submit') }}" method="post">
         {% for question in questions %}
             <div class="question">
-                <h3>{{ question['text'] }}</h3>
+                <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text'] }}</h3>
                 <div class="options">
                     {% for option in question['options'] %}
                         <label>
