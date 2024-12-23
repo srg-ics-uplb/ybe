@@ -66,11 +66,20 @@ def login():
         user = db.execute('SELECT * FROM user_sessions WHERE email = ?', (email,)).fetchone()
         
         if user:
-           
             if exam_code == EXAM_CODE:
+                # Check if there's an active session
+                if user['session_id'] is not None:
+                    logger.warning(f"Active session exists for {email}")
+                    return render_template('login.html', 
+                                    error='Another session is already active for this email',
+                                    quiz_title=QUIZ_TITLE)
+            
+
+
                 # Create new session
                 session['user_id'] = str(uuid.uuid4())
                 session['email'] = email
+                session['score'] = user['score']
                 
                 db.execute('''
                     UPDATE user_sessions 
@@ -81,19 +90,13 @@ def login():
                 ''', (session['user_id'], email))
                 db.commit()
 
-                # Check if there's an active session
-                if user['session_id'] is not None:
-                    logger.warning(f"Active session exists for {email}")
-                    return render_template('login.html', 
-                                    error='Another session is already active for this email',
-                                    quiz_title=QUIZ_TITLE)
-            
                 if user['score'] > -1:
                     logger.info(f"User {email} already took quiz. Score: {user['score']}")
                     return render_template('result.html', 
                                     score=user['score'], 
                                     total=len(load_and_shuffle_questions()),
                                     completed=True)
+
 
                 logger.info(f"New session created for {email}")
                 return redirect(url_for('index'))
@@ -108,7 +111,13 @@ def login():
 def index():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+
+    if session['score'] > -1:
+        return render_template('result.html', 
+                                score=session['score'], 
+                                total=len(load_and_shuffle_questions()),
+                                completed=True)
+
     if 'questions' not in session:
         questions = load_and_shuffle_questions()
         session['questions'] = questions
