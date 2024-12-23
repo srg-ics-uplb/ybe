@@ -2,77 +2,18 @@
 <html>
 <head>
     <title>Quiz</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .nav {
-            text-align: right;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-        .nav a {
-            color: #666;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-        .nav a:hover {
-            background: #eee;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .question {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .options {
-            margin-left: 20px;
-        }
-        label {
-            display: block;
-            margin: 10px 0;
-            cursor: pointer;
-        }
-        button[type="submit"] {
-            background: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-        button[type="submit"]:hover {
-            background: #45a049;
-        }
-        .question-number {
-            color: #4CAF50;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="nav">
+        <div class="quiz-title">{{ quiz_title }}</div>
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>
-    <h1>Multiple Choice Quiz</h1>
-    <form action="{{ url_for('submit') }}" method="post">
+    
+    <form id="quizForm" action="{{ url_for('submit') }}" method="post">
+        <div id="questions-container">
         {% for question in questions %}
-            <div class="question">
+            <div class="question" data-page="{{ (loop.index0 // 3) + 1 }}">
                 <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text'] }}</h3>
                 <div class="options">
                     {% for option in question['options'] %}
@@ -84,7 +25,44 @@
                 </div>
             </div>
         {% endfor %}
-        <button type="submit">Submit Quiz</button>
+        </div>
+        
+        <div class="pagination">
+            <button type="button" id="prevBtn" class="page-btn">Previous</button>
+            <span id="pageInfo"></span>
+            <button type="button" id="nextBtn" class="page-btn">Next</button>
+        </div>
+
+        <button type="submit" id="submitBtn" style="display:none;">Submit Quiz</button>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const questions = document.querySelectorAll('.question');
+            const totalPages = Math.ceil(questions.length / 3);
+            let currentPage = 1;
+
+            function showPage(page) {
+                questions.forEach(q => {
+                    q.style.display = q.dataset.page == page ? 'block' : 'none';
+                });
+                
+                document.getElementById('pageInfo').textContent = `Page ${page} of ${totalPages}`;
+                document.getElementById('prevBtn').disabled = page === 1;
+                document.getElementById('nextBtn').disabled = page === totalPages;
+                document.getElementById('submitBtn').style.display = page === totalPages ? 'block' : 'none';
+            }
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                if (currentPage > 1) showPage(--currentPage);
+            });
+
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (currentPage < totalPages) showPage(++currentPage);
+            });
+
+            showPage(1);
+        });
+    </script>
 </body>
 </html>

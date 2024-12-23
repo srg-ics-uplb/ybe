@@ -50,3 +50,49 @@ questions:
          correct: true
       - answer:
          text: Purple
+
+- multiple_choice:
+   id: q4
+   points: 1
+   text: Which of the following devices is responsible for selecting the best path for a datagram?
+   answers:
+      - answer:
+         text: NIC
+      - answer:
+         text: Hub
+      - answer:
+         text: Switch
+      - answer: 
+         text: Router
+         correct: true
+
+- multiple_choice:
+   id: q5
+   points: 1
+   text: Which of the following protocols use distance-vector routing?
+   answers:
+      - answer:
+         text: OSPF
+      - answer:
+         text: RIP
+         correct: true
+      - answer:
+         text: BGP
+      - answer: 
+         text: DHCP
+ 
+- multiple_response:
+   id: q6
+   points: 1
+   text: A socket is composed of?
+   answers:
+      - answer:
+         text: URL
+      - answer:
+         text: IP Address
+         correct: true
+      - answer:
+         text: MAC Address
+      - answer: 
+         text: Port Number
+         correct: true

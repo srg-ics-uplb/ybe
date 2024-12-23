@@ -5,7 +5,7 @@ from ybe import read_ybe_file
 from ybe.lib.ybe_nodes import YbeExam
 import uuid
 import sqlite3
-from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS, YBE_FILE
+from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS, YBE_FILE, QUIZ_TITLE
 from datetime import datetime
 
 # Configure logger
@@ -84,9 +84,10 @@ def login():
             db.commit()
             return redirect(url_for('index'))
             
-        return render_template('login.html', error='Invalid credentials')
+        return render_template('login.html', error='Invalid credentials',quiz_title=QUIZ_TITLE)
     
-    return render_template('login.html')
+    return render_template('login.html',quiz_title=QUIZ_TITLE)
+
 
 @app.route('/')
 def index():
@@ -95,10 +96,12 @@ def index():
         
     if 'questions' not in session:
         questions = load_and_shuffle_questions()
-        session['total_questions'] = len(questions)
         session['questions'] = questions
-        logger.debug(f"User {session['user_id']}: Loaded {session['total_questions']} questions")
-    return render_template('index.html', questions=session['questions'])
+        logger.debug(f"User {session['user_id']}")
+    
+    return render_template('index.html', 
+                         questions=questions,
+                         quiz_title=QUIZ_TITLE)
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -111,7 +114,7 @@ def submit():
                 if set(selected) == set(question['correct']):
                     score += 1
             
-            total = session.get('total_questions', 0)
+            total = len(session['questions'])
             logger.debug(f"User {session['user_id']}: Score {score}/{total}")
             
             # Update database
