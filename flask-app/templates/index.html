@@ -61,6 +61,13 @@
                 if (currentPage < totalPages) showPage(++currentPage);
             });
 
+            document.getElementById('quizForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to submit your answers? This action cannot be undone.')) {
+                    this.submit();
+                }
+            });
+
             showPage(1);
         });
     </script>

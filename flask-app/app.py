@@ -7,6 +7,7 @@ import uuid
 import sqlite3
 from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS, YBE_FILE, QUIZ_TITLE
 from datetime import datetime
+from config import SCORES_PIN
 
 # Configure logger
 logging.basicConfig(
@@ -142,6 +143,29 @@ def submit():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+@app.route('/scores', methods=['GET', 'POST'])
+def scores():
+    if request.method == 'POST':
+        if request.form.get('pin') == SCORES_PIN:
+            db = get_db()
+            scores = db.execute('''
+                SELECT email, score, completed_at, created_at 
+                FROM user_sessions 
+                ORDER BY email ASC
+            ''').fetchall()
+            return render_template('scores.html',
+                                authenticated=True,
+                                scores=scores,
+                                total_questions=len(load_and_shuffle_questions()),
+                                quiz_title=QUIZ_TITLE)
+        return render_template('scores.html', 
+                             authenticated=False, 
+                             error='Invalid PIN',
+                             quiz_title=QUIZ_TITLE)
+    return render_template('scores.html', 
+                         authenticated=False,
+                         quiz_title=QUIZ_TITLE)
 
 if __name__ == '__main__':
     app.run(debug=True)

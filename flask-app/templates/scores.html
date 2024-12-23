@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Scores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="nav">
+        <div class="quiz-title">{{ quiz_title }}</div>
+    </div>
+
+    {% if not authenticated %}
+    <form method="POST" action="{{ url_for('scores') }}" class="pin-form">
+        <h2>Enter PIN to view scores</h2>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+        <input type="password" name="pin" required>
+        <button type="submit">View Scores</button>
+    </form>
+    {% else %}
+    <div class="scores-container">
+        <div class="scores-header">
+            <h3>Quiz Takers and Scores</h3>
+            <button onclick="downloadCSV()" class="download-btn">
+                📥 Download CSV
+            </button>
+        </div>
+        <table class="scores-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Score</th>
+                    <th>Items</th>
+                    <th>Registration Date</th>
+                    <th>Completion Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td>{{ score['email'] }}</td>
+                    <td>{{ "Completed" if score['completed_at'] else "Not taken" }}</td>
+                    <td>{{ score['score'] if score['score'] >= 0 else "N/A" }}</td>
+                    <td>{{ total_questions }}</td>
+                    <td>{{ score['created_at'] }}</td>
+                    <td>{{ score['completed_at'] if score['completed_at'] else "N/A" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function downloadCSV() {
+            const table = document.querySelector('.scores-table');
+            let csv = [];
+            
+            // Get headers
+            const headers = Array.from(table.querySelectorAll('th'))
+                                .map(th => th.textContent);
+            csv.push(headers.join(','));
+            
+            // Get data rows
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const data = Array.from(row.querySelectorAll('td'))
+                                .map(td => `"${td.textContent}"`);
+                csv.push(data.join(','));
+            });
+            
+            // Create and trigger download
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'quiz_scores.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <style>
+        .scores-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+    </style>
+    {% endif %}
+</body>
+</html>
