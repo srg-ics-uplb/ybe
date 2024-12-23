@@ -65,30 +65,41 @@ def login():
         db = get_db()
         user = db.execute('SELECT * FROM user_sessions WHERE email = ?', (email,)).fetchone()
         
-        if user and exam_code == EXAM_CODE:
-            if user['score'] > -1:  # Quiz already taken
-                logger.info(f"User {email} already took quiz. Score: {user['score']}")
-                return render_template('result.html', 
-                                    score=user['score'], 
-                                    total=len(load_and_shuffle_questions()),
-                                    completed=True)
+        if user:
+            # Check if there's an active session
+            if user['session_id'] is not None:
+                logger.warning(f"Active session exists for {email}")
+                return render_template('login.html', 
+                                    error='Another session is already active for this email',
+                                    quiz_title=QUIZ_TITLE)
             
-            session['user_id'] = str(uuid.uuid4())
-            session['email'] = email
-            db.execute('''
-                UPDATE user_sessions 
-                SET session_id = ?, 
-                    last_login_attempt = CURRENT_TIMESTAMP,
-                    login_count = login_count + 1
-                WHERE email = ?
-            ''', (session['user_id'], email))
-            db.commit()
-            return redirect(url_for('index'))
+            if user['score'] > -1:
+                return render_template('login.html', 
+                                    error='You have already completed this quiz',
+                                    quiz_title=QUIZ_TITLE)
             
-        return render_template('login.html', error='Invalid credentials',quiz_title=QUIZ_TITLE)
+            if exam_code == EXAM_CODE:
+                # Create new session
+                session['user_id'] = str(uuid.uuid4())
+                session['email'] = email
+                
+                db.execute('''
+                    UPDATE user_sessions 
+                    SET session_id = ?, 
+                        last_login_attempt = CURRENT_TIMESTAMP,
+                        login_count = login_count + 1
+                    WHERE email = ?
+                ''', (session['user_id'], email))
+                db.commit()
+                
+                logger.info(f"New session created for {email}")
+                return redirect(url_for('index'))
+        
+        return render_template('login.html', 
+                             error='Invalid credentials',
+                             quiz_title=QUIZ_TITLE)
     
-    return render_template('login.html',quiz_title=QUIZ_TITLE)
-
+    return render_template('login.html', quiz_title=QUIZ_TITLE)
 
 @app.route('/')
 def index():
