@@ -66,18 +66,7 @@ def login():
         user = db.execute('SELECT * FROM user_sessions WHERE email = ?', (email,)).fetchone()
         
         if user:
-            # Check if there's an active session
-            if user['session_id'] is not None:
-                logger.warning(f"Active session exists for {email}")
-                return render_template('login.html', 
-                                    error='Another session is already active for this email',
-                                    quiz_title=QUIZ_TITLE)
-            
-            if user['score'] > -1:
-                return render_template('login.html', 
-                                    error='You have already completed this quiz',
-                                    quiz_title=QUIZ_TITLE)
-            
+           
             if exam_code == EXAM_CODE:
                 # Create new session
                 session['user_id'] = str(uuid.uuid4())
@@ -91,7 +80,21 @@ def login():
                     WHERE email = ?
                 ''', (session['user_id'], email))
                 db.commit()
-                
+
+                # Check if there's an active session
+                if user['session_id'] is not None:
+                    logger.warning(f"Active session exists for {email}")
+                    return render_template('login.html', 
+                                    error='Another session is already active for this email',
+                                    quiz_title=QUIZ_TITLE)
+            
+                if user['score'] > -1:
+                    logger.info(f"User {email} already took quiz. Score: {user['score']}")
+                    return render_template('result.html', 
+                                    score=user['score'], 
+                                    total=len(load_and_shuffle_questions()),
+                                    completed=True)
+
                 logger.info(f"New session created for {email}")
                 return redirect(url_for('index'))
         
@@ -111,6 +114,7 @@ def index():
         session['questions'] = questions
         logger.debug(f"User {session['user_id']}")
     
+    questions = session['questions']
     return render_template('index.html', 
                          questions=questions,
                          quiz_title=QUIZ_TITLE)
@@ -140,7 +144,7 @@ def submit():
             db.commit()
             
             # Clear session
-            session.clear()
+            #session.clear()
             
             return render_template('result.html', score=score, total=total)
             
@@ -152,6 +156,18 @@ def submit():
 
 @app.route('/logout')
 def logout():
+    print(session)
+    if 'email' in session:
+        db = get_db()
+        try:
+            db.execute('UPDATE user_sessions SET session_id = NULL WHERE email = ?', 
+                      (session['email'],))
+            db.commit()
+            logger.info(f"Session cleared for {session['email']}")
+        except sqlite3.Error as e:
+            logger.error(f"Database error during logout: {e}")
+            db.rollback()
+    
     session.clear()
     return redirect(url_for('login'))
 
