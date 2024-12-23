@@ -155,6 +155,7 @@ def submit():
             # Clear session
             #session.clear()
             
+            session['score'] = score
             return render_template('result.html', score=score, total=total)
             
         except sqlite3.Error as e:
