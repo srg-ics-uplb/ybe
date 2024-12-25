@@ -170,7 +170,7 @@ def submit():
             #session.clear()
             
             session['score'] = score
-            return render_template('result.html', score=score, total=tota,email=session['email'],
+            return render_template('result.html', score=score, total=total,email=session['email'],
                          quiz_title=QUIZ_TITLE)
             
         except sqlite3.Error as e:

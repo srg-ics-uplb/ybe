@@ -9,7 +9,7 @@
         <div class="quiz-title">{{ quiz_title }}</div>
         <div class="user-info">
             <span class="email">{{ email }}</span>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('logout') }}" id="logoutLink">Logout</a>
         </div>
     </div>
     
@@ -49,6 +49,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            sessionStorage.setItem('quizSubmitted', 'false');
+            let isSubmitted = sessionStorage.getItem('quizSubmitted') === 'true';
+            const logoutLink = document.getElementById('logoutLink');
+            
+            // Handle form submission
+            document.getElementById('quizForm').addEventListener('submit', function() {
+                isSubmitted = true;
+                sessionStorage.setItem('quizSubmitted', 'true');
+            });
+            
+            // Handle logout click
+            logoutLink.addEventListener('click', function(e) {
+                if (!isSubmitted) {
+                    if (!confirm('You haven\'t submitted your answers yet. Your answers will not be saved. Are you sure you want to logout?')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+            
             const questions = document.querySelectorAll('.question');
             const totalPages = Math.ceil(questions.length / 5);
             let currentPage = 1;
@@ -74,7 +93,7 @@
 
             document.getElementById('quizForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                if (confirm('Are you sure you want to submit your answers? This action cannot be undone.')) {
+                if (confirm('Are you sure you want to submit your answers now? This action cannot be undone.')) {
                     this.submit();
                 }
             });
