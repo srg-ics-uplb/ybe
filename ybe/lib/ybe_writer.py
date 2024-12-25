@@ -159,8 +159,9 @@ class YbeConversionVisitor:
 
         if isinstance(value, TextData):
             if value.is_plaintext():
-                if '\n' in value.text:
-                    return scalarstring.PreservedScalarString(value.text)
+                if isinstance(value.text,str):
+                    if '\n' in value.text:
+                        return scalarstring.PreservedScalarString(value.text)
                 return value.text
             return value
 

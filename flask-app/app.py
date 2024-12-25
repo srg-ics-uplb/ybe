@@ -113,6 +113,7 @@ def login():
         return render_template('login.html', 
                              error='Invalid credentials',
                              quiz_title=QUIZ_TITLE)
+                # Check if there's an active session
     
     return render_template('login.html', quiz_title=QUIZ_TITLE)
 
@@ -176,7 +177,6 @@ def submit():
 
 @app.route('/logout')
 def logout():
-    print(session)
     if 'email' in session:
         db = get_db()
         try:
