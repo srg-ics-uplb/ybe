@@ -104,7 +104,8 @@ def login():
                     return render_template('result.html', 
                                     score=user['score'], 
                                     total=len(load_and_shuffle_questions()),
-                                    completed=True)
+                                    completed=True,email=session['email'],
+                         quiz_title=QUIZ_TITLE)
 
 
                 logger.info(f"New session created for {email}")
@@ -126,7 +127,8 @@ def index():
         return render_template('result.html', 
                                 score=session['score'], 
                                 total=len(load_and_shuffle_questions()),
-                                completed=True)
+                                completed=True,email=session['email'],
+                         quiz_title=QUIZ_TITLE)
 
     if 'questions' not in session:
         questions = load_and_shuffle_questions()
@@ -136,6 +138,7 @@ def index():
     questions = session['questions']
     return render_template('index.html', 
                          questions=questions,
+                         email=session['email'],
                          quiz_title=QUIZ_TITLE)
 
 @app.route('/submit', methods=['POST'])
@@ -167,7 +170,8 @@ def submit():
             #session.clear()
             
             session['score'] = score
-            return render_template('result.html', score=score, total=total)
+            return render_template('result.html', score=score, total=tota,email=session['email'],
+                         quiz_title=QUIZ_TITLE)
             
         except sqlite3.Error as e:
             logger.error(f"Database error: {e}")

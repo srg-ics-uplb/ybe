@@ -1,3 +1,5 @@
 config.py
+*.ybe
 *.pyc
+quiz.db
 __pycache__/

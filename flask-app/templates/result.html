@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Quiz Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,7 +51,11 @@
 </head>
 <body>
     <div class="nav">
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <div class="quiz-title">{{ quiz_title }}</div>
+        <div class="user-info">
+            <span class="email">{{ email }}</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
     </div>
     <h1>Quiz Result</h1>
     <div class="result-card">

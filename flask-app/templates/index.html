@@ -7,13 +7,16 @@
 <body>
     <div class="nav">
         <div class="quiz-title">{{ quiz_title }}</div>
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <div class="user-info">
+            <span class="email">{{ email }}</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
     </div>
     
     <form id="quizForm" action="{{ url_for('submit') }}" method="post">
         <div id="questions-container">
         {% for question in questions %}
-            <div class="question" data-page="{{ (loop.index0 // 3) + 1 }}" data-id="{{ question['id'] }}">
+            <div class="question" data-page="{{ (loop.index0 // 5) + 1 }}" data-id="{{ question['id'] }}">
                 <!-- Question text outside form elements -->
                 <div class="question-display">
                     <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text']|markdown }}</h3>
@@ -47,7 +50,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const questions = document.querySelectorAll('.question');
-            const totalPages = Math.ceil(questions.length / 3);
+            const totalPages = Math.ceil(questions.length / 5);
             let currentPage = 1;
 
             function showPage(page) {
