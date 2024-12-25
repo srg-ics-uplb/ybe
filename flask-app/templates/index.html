@@ -14,7 +14,7 @@
         <div id="questions-container">
         {% for question in questions %}
             <div class="question" data-page="{{ (loop.index0 // 3) + 1 }}">
-                <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text'] }}</h3>
+                <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text']|markdown }}</h3>
                 <div class="options">
                     {% for option in question['options'] %}
                         <label>

@@ -8,6 +8,7 @@ import sqlite3
 from config import EXAM_CODE, MAX_LOGIN_ATTEMPTS, YBE_FILE, QUIZ_TITLE
 from datetime import datetime
 from config import SCORES_PIN
+from flaskext.markdown import Markdown
 
 # Configure logger
 logging.basicConfig(
@@ -17,6 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+Markdown(app,output_format='html4')
 app.secret_key = 'your-secret-key-here'  # Change this to a secure key
 
 def get_db():
@@ -32,7 +34,6 @@ def load_and_shuffle_questions():
     
     # Shuffle questions
     random.shuffle(ybe_data.questions)
-    
     for q in ybe_data.questions:
         # Get answers and shuffle them
         answers = q.answers.copy()
@@ -47,7 +48,7 @@ def load_and_shuffle_questions():
         # Format for template and log
         question_dict = {
             'id': q.id,
-            'text': q.text.to_plaintext(),
+            'text': q.text.to_markdown(),
             'options': [a.text.text for a in answers],
             'correct': [a.text.text for a in answers if a.correct]
         }
@@ -58,6 +59,7 @@ def load_and_shuffle_questions():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if request.method == 'POST':
         email = request.form['email']
         exam_code = request.form['exam_code']
