@@ -116,6 +116,15 @@ def login():
                              quiz_title=QUIZ_TITLE)
                 # Check if there's an active session
     
+    if request.method == 'GET':
+        if 'user_id' in session:
+            questions = session['questions']
+            return render_template('index.html', 
+                         questions=questions,
+                         email=session['email'],
+                         quiz_title=QUIZ_TITLE)
+
+
     return render_template('login.html', quiz_title=QUIZ_TITLE)
 
 @app.route('/')
