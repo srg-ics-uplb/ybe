@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,session
+from flask_session import Session
 import random
 import logging
 from ybe import read_ybe_file
@@ -18,8 +19,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-Markdown(app,output_format='html4')
 app.secret_key = 'your-secret-key-here'  # Change this to a secure key
+
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './sessions'
+
+Markdown(app,output_format='html4')
+Session(app)
+
 
 def get_db():
     db = sqlite3.connect('quiz.db')
@@ -133,6 +140,7 @@ def index():
 @app.route('/submit', methods=['POST'])
 def submit():
     score = 0
+    logger.info(session)
     if 'questions' in session and 'user_id' in session:
         db = get_db()
         try:

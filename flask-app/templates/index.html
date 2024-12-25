@@ -13,12 +13,20 @@
     <form id="quizForm" action="{{ url_for('submit') }}" method="post">
         <div id="questions-container">
         {% for question in questions %}
-            <div class="question" data-page="{{ (loop.index0 // 3) + 1 }}">
-                <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text']|markdown }}</h3>
+            <div class="question" data-page="{{ (loop.index0 // 3) + 1 }}" data-id="{{ question['id'] }}">
+                <!-- Question text outside form elements -->
+                <div class="question-display">
+                    <h3><span class="question-number">{{ loop.index }}.</span> {{ question['text']|markdown }}</h3>
+                </div>
+                
+                <!-- Only answer choices included in form -->
                 <div class="options">
                     {% for option in question['options'] %}
                         <label>
-                            <input type="checkbox" name="question-{{ question['id'] }}" value="{{ option }}">
+                            <input type="checkbox" 
+                                   name="question-{{ question['id'] }}" 
+                                   value="{{ option }}"
+                                   class="answer-input">
                             {{ option }}
                         </label>
                     {% endfor %}
