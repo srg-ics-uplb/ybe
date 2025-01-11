@@ -3,3 +3,4 @@ config.py
 *.pyc
 quiz.db
 __pycache__/
+quiz_codes.csv
