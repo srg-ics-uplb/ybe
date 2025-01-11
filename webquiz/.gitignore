@@ -4,3 +4,4 @@ config.py
 quiz.db
 __pycache__/
 quiz_codes.csv
+sessions/
