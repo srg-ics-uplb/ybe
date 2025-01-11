@@ -142,6 +142,10 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     score = 0
     logger.info(session)
     if 'questions' in session and 'user_id' in session:
